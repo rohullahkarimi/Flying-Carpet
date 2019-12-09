@@ -72,14 +72,14 @@
 				var vertices = [];
 				var textureLoader = new THREE.TextureLoader();
 
-				var sprite1 = textureLoader.load( 'images/crate.gif');
-				var sprite2 = textureLoader.load( 'images/crate.gif');
-				var sprite3 = textureLoader.load('images/crate.gif');
-				var sprite4 = textureLoader.load( 'images/crate.gif');
-				var sprite5 = textureLoader.load('images/crate.gif');
+				var sprite1 = textureLoader.load( 'images/waterDrop.png');
+				var sprite2 = textureLoader.load( 'images/waterDrop.png');
+				var sprite3 = textureLoader.load('images/waterDrop.png');
+				var sprite4 = textureLoader.load('images/waterDrop.png');
+				var sprite5 = textureLoader.load('images/waterDrop.png');
 				
 
-				for ( var i = 0; i < 10000; i ++ ) {
+				for ( var i = 0; i < 5000; i ++ ) { // decrease from 10000 to 5000
 					var x = Math.random() * 2000 - 1000;
 					var y = Math.random() * 2000 - 1000;
 					var z = Math.random() * 2000 - 1000;
@@ -244,8 +244,8 @@
 				requestAnimationFrame( animate );
 
                 // rotation of mesh. mesh include geometry and material
-				//mesh.rotation.x += 0.005;
-				//mesh.rotation.y += 0.01;
+				//textMesh.rotation.x += 0.005;
+				//textMesh.rotation.y += 0.01;
 
                 controls.update();
                 renderer.render(scene, camera);
