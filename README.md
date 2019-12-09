@@ -4,7 +4,7 @@ It is an animated 3D computer and web browser program. Three.Js is a JavaScript 
 
 MIT License
 
-Copyright (c) [year] [fullname]
+Copyright (c) 2019 Rohullah Karimi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

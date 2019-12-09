@@ -24,7 +24,7 @@
 		<script  src="https://threejs.org/examples/js/loaders/ColladaLoader.js"></script>
 		<script>			
             // variables
-			var camera, scene, stats, scene1, scene2, light1, light2, renderer;
+			var camera, scene, stats, scene1, scene2, light1, light2, renderer,  materials = [];
 			var mesh;
 			var font2;
 
@@ -37,21 +37,22 @@
             function init() {
                 // camera
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 5000 );
-				camera.position.z = 400;
+				camera.position.z = 600;
 
                 // scene
                 scene = new THREE.Scene();
 
  
-                // texture
+                // textures
                 var texture = new THREE.TextureLoader().load('images/floor.jpg');
                 var texture_house = new THREE.TextureLoader().load('images/house.jpg');
-                var textureForSky = new THREE.TextureLoader().load( 'images/earthcloudmap.jpg' );
+				var textureForSky = new THREE.TextureLoader().load( 'images/earthcloudmap.jpg' );
+				var textureCarpet = new THREE.TextureLoader().load( 'images/carpet.jpg' );
                
 
                 //BoxBufferGeometry(width : Float, height : Float, depth : Float, widthSegments : Integer, heightSegments : Integer, depthSegments : Integer)
 				var geometry = new THREE.CylinderBufferGeometry( 500, 50, 200, 10 );    // for land shape
-                var material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });  // meterial
+                var material = new THREE.MeshBasicMaterial({ map: textureCarpet, side: THREE.DoubleSide });  // meterial
 				var cylinder = new THREE.Mesh( geometry, material );
 				scene.add( cylinder );
 				
@@ -62,11 +63,49 @@
                 scene.add(mesh);     // add , Mesh to scene
 
 
-                //var scene = new THREE.Scene();
+                //Fog
                 fogColor = new THREE.Color(0xffffff);
- 
-               // scene.background = fogColor;
-                scene.fog = new THREE.FogExp2(fogColor, 0.0010, 25);
+				scene.fog = new THREE.FogExp2(fogColor, 0.0010, 25);
+				
+				// RAINING	
+				var geometry = new THREE.BufferGeometry();	
+				var vertices = [];
+				var textureLoader = new THREE.TextureLoader();
+
+				var sprite1 = textureLoader.load( 'images/crate.gif');
+				var sprite2 = textureLoader.load( 'images/crate.gif');
+				var sprite3 = textureLoader.load('images/crate.gif');
+				var sprite4 = textureLoader.load( 'images/crate.gif');
+				var sprite5 = textureLoader.load('images/crate.gif');
+				
+
+				for ( var i = 0; i < 10000; i ++ ) {
+					var x = Math.random() * 2000 - 1000;
+					var y = Math.random() * 2000 - 1000;
+					var z = Math.random() * 2000 - 1000;
+					vertices.push( x, y, z );
+				}
+				geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+				parameters = [
+					[[ 1.0, 0.2, 0.5 ], sprite2, 20 ],
+					[[ 0.95, 0.1, 0.5 ], sprite3, 15 ],
+					[[ 0.90, 0.05, 0.5 ], sprite1, 10 ],
+					[[ 0.85, 0, 0.5 ], sprite5, 8 ],
+					[[ 0.80, 0, 0.5 ], sprite4, 5 ]
+				];
+				for ( var i = 0; i < 1; i ++ ) {
+					var color = parameters[ i ][ 0 ];
+					var sprite = parameters[ i ][ 1 ];
+					var size = parameters[ i ][ 2 ];
+					materials[ i ] = new THREE.PointsMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: false, transparent: true } );
+					materials[ i ].color.setHSL( color[ 0 ], color[ 1 ], color[ 2 ] );
+					var particles = new THREE.Points( geometry, materials[ i ] );
+					particles.rotation.x = Math.random() * 6;
+					particles.rotation.y = Math.random() * 6;
+					particles.rotation.z = Math.random() * 6;
+					scene.add( particles );
+				}
+				//end.. RAINING 
 
 
 
@@ -87,16 +126,13 @@
                 var mesh4 = new THREE.Mesh(geometry, materialForSky);  // meterial
                 scene.add(mesh4);
 
-				// TEXT 
-
 				// font loader 
-				
 				const loader1 = new THREE.TTFLoader()
 				const fontLoader = new THREE.FontLoader()
 				
-				loader1.load('./font/Roboto-Medium.ttf',fnt => {
+				loader1.load('./font/SEASRN.ttf',fnt => {
 					font2 = fontLoader.parse(fnt);
-					var geometryText = new THREE.TextGeometry( 'MY WORLD', {
+					var geometryText = new THREE.TextGeometry( 'Flying Carpet', {
 						font: font2,
 						size: 80,
 						height: 5,
@@ -111,10 +147,9 @@
 					textMesh = new THREE.Mesh(geometryText, material2);  // meterial
                 	scene.add(textMesh);
 					textMesh.position.y = 150;
-					textMesh.position.x = -300;
+					textMesh.position.x = -400;
 					textMesh.position.z = -300;	
-				});
-					
+				});	
 				// end... text with font.
 		
 
@@ -122,44 +157,31 @@
                 // White directional light at half intensity shining from the top.
                 var directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
                 directionalLight.position.set(200, 100, 100);
-                scene.add( directionalLight );
-
-
-				// loading manager model 1   DAE
-			
-				//var ColladaLoader = require('loaders/colladaLoader.js'); 
+				scene.add( directionalLight );
 				
+				// SPOTLIGHT 
+                var spotLight = new THREE.SpotLight( 0xffffff, 0.4 );
+                spotLight.position.set( 200, 150, 500 );
+                scene.add(spotLight);
+
+                var spotLightHelper = new THREE.SpotLightHelper( spotLight );
+                scene.add( spotLightHelper );
+				// end.. SPOTLIGHT
+
+
+				// COLLADA LOADER__  DAE
 				var loader = new THREE.ColladaLoader();
 				loader.load("./model/elf.dae", function (collada) {
 					dae = collada.scene;
-
-					dae.position.y = 110;
+					dae.position.y = 115;
 					dae.position.x = -150;
 					dae.scale.x = dae.scale.y = dae.scale.z = 10;
 
-					//dae.scale.x = dae.scale.y = dae.scale.z = 0.09;
-					//dae.position.set(0, controls.userHeight - 8, -16)
 					dae.updateMatrix();
 					scene.add(dae);
-		
 				}, onProgress, onError );
 				
-				// for test
-				/*
-				var loader = new THREE.OBJLoader();
-				loader.load
-				{
-					"./model/pressure.json",
-					function(objeck)
-					{
-						scene.add(object);
-					}
-				};
-				*/
-				// end .. model 1
-				
-				
-				
+
 				// start of model 2 penkki
 				var onProgress = function ( xhr ) {
 					if ( xhr.lengthComputable ) {
@@ -170,8 +192,7 @@
 				var onError = function () { };
 				var manager = new THREE.LoadingManager();
 				manager.addHandler( /\.dds$/i, new THREE.DDSLoader() );
-				// comment in the following line and import TGALoader if your asset uses TGA textures
-				// manager.addHandler( /\.tga$/i, new TGALoader() );
+
 				new THREE.MTLLoader( manager )
 					.setPath( './model/' )
 					.load( 'materials.mtl', function ( materials ) {
@@ -180,13 +201,15 @@
 							.setMaterials( materials )
 							.setPath( './model/' )
 							.load( 'model.obj', function ( object ) {
-								object.position.y = 110;
-								object.position.x = 150;
+								object.position.y = 115;
+								object.position.x = -150;
+
+								object.rotation.y = 800;
+
 								object.scale.x = object.scale.y = object.scale.z = 90;
 								scene.add( object );
 							}, onProgress, onError );
 					} );
-				//
 				// end... model 
 				
 
@@ -226,42 +249,23 @@
 
                 controls.update();
                 renderer.render(scene, camera);
+		
+				for ( var i = 0; i < materials.length; i ++ ) {
+						var color = parameters[ i ][ 0 ];
+						var h = ( 360 * ( color[ 0 ] + time ) % 360 ) / 360;
+						materials[ i ].color.setHSL( h, color[ 1 ], color[ 2 ] );
+					}
+				renderer.render(scene, camera);
 			}
+			
+		
+
         /*
          * // Canvas, where the renderer draws its output
          * 
          *
          *
          * */
-
-
-			// text loader 
-				/*
-				var loader1 = new THREE.FontLoader();
-				var loader = new THREE.FontLoader();
-				loader.load( 'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function ( font ) {
-
-					var geometryText = new THREE.TextGeometry( 'MY WORLD', {
-						font: font,
-						size: 80,
-						height: 5,
-						curveSegments: 12,
-						bevelEnabled: true,
-						bevelThickness: 10,
-						bevelSize: 8,
-						bevelOffset: 0,
-						bevelSegments: 5
-					} );
-
-					textMesh = new THREE.Mesh(geometryText, material2);  // meterial
-                	scene.add(textMesh);
-					textMesh.position.y = 150;
-					textMesh.position.x = -300;
-					textMesh.position.z = -300;	
-
-				});
-				*/
-				// END.. TEXT
 
 
 				/*  SPOTLIGHT 
