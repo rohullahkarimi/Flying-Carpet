@@ -48,6 +48,9 @@
                 var texture_house = new THREE.TextureLoader().load('images/house.jpg');
 				var textureForSky = new THREE.TextureLoader().load( 'images/earthcloudmap.jpg' );
 				var textureCarpet = new THREE.TextureLoader().load( 'images/carpet.jpg' );
+				var textureGold = new THREE.TextureLoader().load( 'images/gold.jpg' );
+				var textureAutumn = new THREE.TextureLoader().load( 'images/autumn.jpg' );
+               
                
 
                 //BoxBufferGeometry(width : Float, height : Float, depth : Float, widthSegments : Integer, heightSegments : Integer, depthSegments : Integer)
@@ -103,6 +106,8 @@
 					particles.rotation.x = Math.random() * 6;
 					particles.rotation.y = Math.random() * 6;
 					particles.rotation.z = Math.random() * 6;
+					// add some rotation to the system
+					particles.rotation.y += 1.01;
 					scene.add( particles );
 				}
 				//end.. RAINING 
@@ -118,6 +123,75 @@
 				scene.add(mesh2);
 				mesh2.position.y = 150;
 				//mesh3.position.x = 60; mesh3.position.y = 100;
+
+
+				// SMALL MOUNTAIN
+				var triangleGeometry = new THREE.Geometry(); 
+                triangleGeometry.vertices.push(new THREE.Vector3( 0,  100.0, 0)); 
+                triangleGeometry.vertices.push(new THREE.Vector3(-100, -100.0, -100.0)); 
+                triangleGeometry.vertices.push(new THREE.Vector3( 100.0, -100.0, -100.0)); 
+				triangleGeometry.vertices.push(new THREE.Vector3( 100.0, -100.0, 100.0));
+				triangleGeometry.vertices.push(new THREE.Vector3( -100.0, -100.0, 100.0));
+
+				triangleGeometry.faces.push(new THREE.Face3(0, 1, 2));
+				triangleGeometry.faces.push(new THREE.Face3(0, 2, 3));  
+				triangleGeometry.faces.push(new THREE.Face3(0, 3, 4)); 
+
+				//triangleGeometry.faces.push(new THREE.Face3(0, 1, 3)); 
+				triangleGeometry.faces.push(new THREE.Face3(0, 4, 1));  
+
+
+				// cordinators
+				triangleGeometry.faceVertexUvs[0] = [];
+				triangleGeometry.faceVertexUvs[0].push([
+					new THREE.Vector2(0, 0 ),
+					new THREE.Vector2(0, 1),
+					new THREE.Vector2(1, 1),
+				]);
+				//
+				triangleGeometry.uvsNeedUpdate = true; 
+				triangleGeometry.faceVertexUvs[0].push([
+					new THREE.Vector2(0, 0 ),
+					new THREE.Vector2(0, 1),
+					new THREE.Vector2(1, 1),
+				]);
+				// 
+				triangleGeometry.uvsNeedUpdate = true; 
+				triangleGeometry.faceVertexUvs[0].push([
+					new THREE.Vector2(0, 0 ),
+					new THREE.Vector2(0, 1),
+					new THREE.Vector2(1, 1),
+				]);
+				// 
+				triangleGeometry.uvsNeedUpdate = true; 
+				triangleGeometry.faceVertexUvs[0].push([
+					new THREE.Vector2(0, 0 ),
+					new THREE.Vector2(0, 1),
+					new THREE.Vector2(1, 1),
+				]);
+				triangleGeometry.uvsNeedUpdate = true; 
+				triangleGeometry.faceVertexUvs[0].push([
+					new THREE.Vector2(0, 0 ),
+					new THREE.Vector2(0, 1),
+					new THREE.Vector2(1, 1),
+				]);
+				triangleGeometry.uvsNeedUpdate = true; 
+
+				// valaistutsta varten moodlista
+				triangleGeometry.normalsNeedUpdate = true;  // Geometry, ei BufferGeometry
+				triangleGeometry.computeFaceNormals();
+				triangleGeometry.computeVertexNormals();
+
+				// muuta color ->  map
+				var material = new THREE.MeshPhongMaterial( { map: textureGold, side: THREE.DoubleSide } );
+
+				meshMountain = new THREE.Mesh( triangleGeometry, material );
+				// positions
+				meshMountain.position.y = 150;
+				meshMountain.position.x = 120;
+				meshMountain.position.z = -100;	
+				scene.add( meshMountain );
+				// end.. SMALL MOUNTAIN
       
 
 
@@ -127,6 +201,7 @@
                 scene.add(mesh4);
 
 				// font loader 
+				var materialForText = new THREE.MeshLambertMaterial({ map: textureAutumn, side: THREE.DoubleSide });  // meterial
 				const loader1 = new THREE.TTFLoader()
 				const fontLoader = new THREE.FontLoader()
 				
@@ -144,7 +219,7 @@
 						bevelSegments: 5
 					} );
 
-					textMesh = new THREE.Mesh(geometryText, material2);  // meterial
+					textMesh = new THREE.Mesh(geometryText, materialForText);  // meterial
                 	scene.add(textMesh);
 					textMesh.position.y = 150;
 					textMesh.position.x = -400;
@@ -165,7 +240,7 @@
                 scene.add(spotLight);
 
                 var spotLightHelper = new THREE.SpotLightHelper( spotLight );
-                scene.add( spotLightHelper );
+                //scene.add( spotLightHelper );
 				// end.. SPOTLIGHT
 
 
@@ -240,7 +315,7 @@
 			}
 
 			function animate() {
-
+				var time = Date.now() * 0.00005;
 				requestAnimationFrame( animate );
 
                 // rotation of mesh. mesh include geometry and material
