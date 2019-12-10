@@ -9,6 +9,9 @@
         <script src="js/three.js"></script>
 		
 		
+
+
+
         <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 		
 		<script src="https://threejs.org/examples/js/loaders/DDSLoader.js"></script>
@@ -22,13 +25,21 @@
         <script src="https://cdn.jsdelivr.net/npm/opentype.js@latest/dist/opentype.min.js"></script>
 		
 		<script  src="https://threejs.org/examples/js/loaders/ColladaLoader.js"></script>
+
+		<script src="http://stemkoski.github.io/Three.js/js/KeyboardState.js"></script>
 		<script>			
             // variables
 			var camera, scene, stats, scene1, scene2, light1, light2, renderer,  materials = [];
 			var mesh;
 			var font2;
 
-			
+			var keyboard = new KeyboardState();
+			var clock = new THREE.Clock();
+
+			// custom global variables
+			//var cube;
+			var projector, mouse = { x: 0, y: 0 }, INTERSECTED;
+						
             // functions
 			init();
 			animate();
@@ -187,9 +198,9 @@
 
 				meshMountain = new THREE.Mesh( triangleGeometry, material );
 				// positions
-				meshMountain.position.y = 150;
+				meshMountain.position.y = 200;
 				meshMountain.position.x = 120;
-				meshMountain.position.z = -100;	
+				meshMountain.position.z = -110;	
 				scene.add( meshMountain );
 				// end.. SMALL MOUNTAIN
       
@@ -250,6 +261,7 @@
 					dae = collada.scene;
 					dae.position.y = 115;
 					dae.position.x = -150;
+					dae.position.z = 50;
 					dae.scale.x = dae.scale.y = dae.scale.z = 10;
 
 					dae.updateMatrix();
@@ -278,6 +290,7 @@
 							.load( 'model.obj', function ( object ) {
 								object.position.y = 115;
 								object.position.x = -150;
+								object.position.z = 50;
 
 								object.rotation.y = 800;
 
@@ -314,7 +327,28 @@
 
 			}
 
+			function onDocumentMouseMove( event ) {
+				// the following line would stop any other event handler from firing
+				// (such as the mouse's TrackballControls)
+				// event.preventDefault();
+				
+				// update the mouse variable
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			}
+
+		
 			function animate() {
+
+				keyboard.update();
+				if (keyboard.down("left")){
+					meshMountain.position.x -= 50;
+				}else if (keyboard.down("right")){
+					meshMountain.position.x += 50;
+				}
+
+
+
 				var time = Date.now() * 0.00005;
 				requestAnimationFrame( animate );
 
