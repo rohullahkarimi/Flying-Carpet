@@ -8,14 +8,22 @@ It is an animated 3D computer and web browser program. Three.Js is a JavaScript 
 3. Project used two kind of three.js loaders. OBJLoader for bench and ColladaLoader for elf.dae object
 4. Floor is made of CylinderBufferGeometry and it looks like diamond with multiple angels
 5. "Flying Carpet" text contain autumn texture and SEASRN.ttf font. For font loading we used TTFLoader example by Josh Marinacci
+7. Points three.js example used for raining features. Randomly animate water drop texture around the scene. 
 
 
-Links:
+# Links
 
 Josh Marinacci: TTFLOADER EXAMPLE 
 https://medium.com/@joshmarinacci/threejs-secretly-supports-true-type-fonts-b896df19af2e
 
+Stemkoski examples: 
+http://stemkoski.github.io/Three.js/
 
+Points demo:
+https://threejs.org/examples/?q=points#webgl_points_sprites
+
+Points source code:
+https://github.com/mrdoob/three.js/blob/master/examples/webgl_points_sprites.html
 
 
 

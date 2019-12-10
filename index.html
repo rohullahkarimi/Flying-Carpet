@@ -7,11 +7,7 @@
 	</head>
 	<body  oncontextmenu="return false;">
         <script src="js/three.js"></script>
-		
-		
-
-
-
+	
         <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 		
 		<script src="https://threejs.org/examples/js/loaders/DDSLoader.js"></script>
@@ -93,7 +89,7 @@
 				var sprite5 = textureLoader.load('images/waterDrop.png');
 				
 
-				for ( var i = 0; i < 5000; i ++ ) { // decrease from 10000 to 5000
+				for ( var i = 0; i < 10000; i ++ ) { // decrease from 10000 to 5000
 					var x = Math.random() * 2000 - 1000;
 					var y = Math.random() * 2000 - 1000;
 					var z = Math.random() * 2000 - 1000;
@@ -123,9 +119,6 @@
 				}
 				//end.. RAINING 
 
-
-
-                
 				var house1 = new THREE.BoxBufferGeometry(30, 100, 30);    // box shape
 				//var house2 = new THREE.BoxBufferGeometry(60, 200, 30);    // box shape
 				var material2 = new THREE.MeshLambertMaterial({ map: texture_house, side: THREE.DoubleSide });  // meterial
@@ -366,7 +359,14 @@
 				//textMesh.rotation.y += 0.01;
 
                 controls.update();
-                renderer.render(scene, camera);
+				renderer.render(scene, camera);
+				
+				for ( var i = 0; i < scene.children.length; i ++ ) {
+					var object = scene.children[ i ];
+					if ( object instanceof THREE.Points ) {
+						object.rotation.y = time * ( i < 4 ? i + 1 : - ( i + 1 ) );
+					}
+				}
 		
 				for ( var i = 0; i < materials.length; i ++ ) {
 						var color = parameters[ i ][ 0 ];
