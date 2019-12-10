@@ -2,15 +2,15 @@
 It is an animated 3D computer and web browser program. Three.Js is a JavaScript library that used in project. 
 
 # Features
-1. You can move the Gold mountain to left and right by clicking keyboard's left and right arrows 
-2. Mouse left and right click button move all the scene to left and right 
+1. You can move the Gold mountain to left and right by clicking keyboard's left and right arrows keys
+2. Mouse left and right click button move all the scene to top and bottom 
 3. Project used two kind of three.js loaders. OBJLoader for bench and ColladaLoader for elf.dae object. File version is 1.4.1
 4. Floor is made of CylinderBufferGeometry and it looks like diamond with multiple angels
 5. "Flying Carpet" text contain autumn texture and SEASRN.ttf font. For font loading we used TTFLoader example by Josh Marinacci
 7. Points three.js example used for raining features. Randomly animate water drop texture around the scene.
 8. The three.js source code used for skybox. It contains a cloudly sky texture
 9. Directional light and Spotlight used for brightness of scene
-
+ 
 
 # Links and source code
 
