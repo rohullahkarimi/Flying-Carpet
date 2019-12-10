@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">		
 	</head>
-	<body>
+	<body  oncontextmenu="return false;">
         <script src="js/three.js"></script>
 		
 		
@@ -313,10 +313,19 @@
 
 				controls = new THREE.OrbitControls(camera, renderer.domElement);
 				// DeviceOrientationControls
-
+				
+				window.addEventListener('mousedown', onMouseDown, false); 
 				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
+
+
+			function onMouseDown(event)         // LISÄÄ
+			{
+				if (event.button == 0) { scene.position.y += 50; }
+				if (event.button == 2) { scene.position.y -= 50; return false; }  // CONTEXTMENU POIS
+			}
+
 
 			function onWindowResize() {
 
@@ -366,30 +375,12 @@
 					}
 				renderer.render(scene, camera);
 			}
-			
-		
-
         /*
          * // Canvas, where the renderer draws its output
          * 
          *
          *
          * */
-
-
-				/*  SPOTLIGHT 
-                var spotLight = new THREE.SpotLight( 0xffffff );
-                spotLight.position.set( 200, 100, 500 );
-                scene.add(spotLight);
-
-
-                var spotLightHelper = new THREE.SpotLightHelper( spotLight );
-                scene.add( spotLightHelper );
-
-				*/
-
-
-
 		</script>
 	</body>
 </html>
