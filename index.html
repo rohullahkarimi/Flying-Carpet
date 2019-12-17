@@ -233,10 +233,40 @@
 		
 
 			
-                // White directional light at half intensity shining from the top.
-                var directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-                directionalLight.position.set(200, 100, 100);
-				scene.add( directionalLight );
+
+				//Create a DirectionalLight and turn on shadows for the light
+				var light = new THREE.DirectionalLight( 0xffffff, 1, 100 );
+				light.position.set( 200, 100, 100 ); 			//default; light shining from top
+				light.castShadow = true;            // default false
+				scene.add( light );
+
+				//Create a sphere that cast shadows (but does not receive them)
+				var sphereGeometry = new THREE.SphereBufferGeometry( 5, 32, 32 );
+				var sphereMaterial = new THREE.MeshStandardMaterial( { color: 0xff0000 } );
+				var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+				sphere.castShadow = true; //default is false
+				sphere.receiveShadow = false; //default
+				scene.add( sphere );
+
+				//Create a plane that receives shadows (but does not cast them)
+				var planeGeometry = new THREE.PlaneBufferGeometry( 20, 20, 32, 32 );
+				var planeMaterial = new THREE.MeshStandardMaterial( { color: 0x00ff00 } )
+				var plane = new THREE.Mesh( planeGeometry, planeMaterial );
+				plane.receiveShadow = true;
+				scene.add( plane );
+
+				//Create a helper for the shadow camera (optional)
+				var helper = new THREE.CameraHelper( light.shadow.camera );
+				scene.add( helper );
+
+
+
+
+
+
+
+
+
 				
 				// SPOTLIGHT 
                 var spotLight = new THREE.SpotLight( 0xffffff, 0.4 );
