@@ -12,7 +12,7 @@ It is an animated 3D computer and web browser program. Three.Js is a JavaScript 
 9. Directional light and Spotlight used for brightness of scene
  
 
-# Links and source code
+# Links and source code.
 
 Josh Marinacci: TTFLOADER EXAMPLE 
 https://medium.com/@joshmarinacci/threejs-secretly-supports-true-type-fonts-b896df19af2e
