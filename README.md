@@ -10,6 +10,7 @@ It is an animated 3D computer and web browser program. Three.Js is a JavaScript 
 7. Points three.js example used for raining features. Randomly animate water drop texture around the scene.
 8. The three.js source code used for skybox. It contains a cloudly sky texture
 9. Directional light and Spotlight used for brightness of scene
+10. Shadow for Directional light
  
 
 # Links and source code.
